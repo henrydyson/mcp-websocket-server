@@ -1,15 +1,16 @@
 # MCP WebSocket Server
 
-WebSocket üzerinden çalışan MCP sunucusu. Mail işlemleri için tasarlanmıştır.
+A Model Context Protocol (MCP) server that operates over WebSocket. Designed for mail operations and communication.
 
-## Özellikler
+## Features
 
-- 🔌 WebSocket bağlantısı
-- 📧 Mail getirme ve arama
-- 📊 Mail istatistikleri
-- 🚀 Render.com'da host edilebilir
+- 🔌 WebSocket connection
+- 📧 Mail retrieval and search
+- 📊 Mail statistics
+- 🚀 Can be hosted on Render.com
+- 🏥 Health check endpoint
 
-## Kurulum
+## Installation
 
 ```bash
 npm install
@@ -17,11 +18,11 @@ npm run build
 npm start
 ```
 
-## Kullanım
+## Usage
 
-### Claude Desktop Yapılandırması
+### Claude Desktop Configuration
 
-`%APPDATA%\Claude\claude_desktop_config.json` dosyasına ekleyin:
+Add to your `%APPDATA%\Claude\claude_desktop_config.json` file:
 
 ```json
 {
@@ -39,22 +40,46 @@ npm start
 
 ## API Endpoints
 
-- `/` - Web arayüzü
-- `/mcp` - WebSocket endpoint
+- `/` - Web interface
+- `/health` - Health check endpoint
+- `/mcp` - WebSocket endpoint for MCP
 
-## Araçlar
+## Available Tools
 
-- `test_baglanti` - Bağlantıyı test eder
-- `mail_getir` - Email adresine göre son maili getirir
-- `mail_ara` - Mail içeriğinde arama yapar
-- `mail_istatistik` - Mail istatistiklerini gösterir
+- `test_baglanti` - Test the connection
+- `mail_getir` - Get the latest mail for a specified email address
+- `mail_ara` - Search within mail content
+- `mail_istatistik` - Show mail statistics
 
 ## Deployment
 
-Render.com üzerinde deploy etmek için:
+### Deploy on Render.com:
 
-1. GitHub'a push edin
-2. Render.com'da yeni Web Service oluşturun
-3. GitHub repo'nuzu bağlayın
-4. Build command: `npm install && npm run build`
-5. Start command: `npm start`
+1. Push to GitHub
+2. Create a new Web Service on Render.com
+3. Connect your GitHub repository
+4. Configure build settings:
+   - **Build command**: `npm install && npm run build`
+   - **Start command**: `npm start`
+   - **Health check path**: `/health`
+
+### Environment
+
+- Node.js 16.0.0 or higher required
+- Automatically uses `PORT` environment variable
+
+## Testing
+
+Test your deployment:
+- Main page: `https://your-app.onrender.com/`
+- Health check: `https://your-app.onrender.com/health`
+- WebSocket: `wss://your-app.onrender.com/mcp`
+
+Use MCP Inspector to test the WebSocket connection:
+```bash
+npx @modelcontextprotocol/inspector wss://your-app.onrender.com/mcp
+```
+
+## License
+
+MIT

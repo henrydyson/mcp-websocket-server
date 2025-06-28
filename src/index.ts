@@ -6,6 +6,11 @@ import { createServer } from 'http';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Health check endpoint for Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', timestamp: new Date().toISOString() });
+});
+
 // Ana sayfa
 app.get('/', (req, res) => {
   const host = req.headers.host || 'localhost';
@@ -318,8 +323,17 @@ wss.on('connection', async (ws) => {
   });
 });
 
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  httpServer.close(() => {
+    console.log('HTTP server closed');
+  });
+});
+
 // Sunucuyu başlat
 httpServer.listen(PORT, () => {
   console.log('🚀 MCP WebSocket sunucusu başlatıldı: http://localhost:' + PORT);
   console.log('📡 WebSocket endpoint: ws://localhost:' + PORT + '/mcp');
+  console.log('🏥 Health check: http://localhost:' + PORT + '/health');
 });

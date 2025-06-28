@@ -22,16 +22,42 @@ npm start
 
 ### Claude Desktop Configuration
 
+There are two ways to configure Claude Desktop to use this server:
+
+#### Option 1: Using the deployed server on Render (Recommended)
+
 Add to your `%APPDATA%\Claude\claude_desktop_config.json` file:
 
 ```json
 {
   "mcpServers": {
     "mail-mcp-server": {
-      "command": "npx",
+      "command": "node",
       "args": [
-        "@modelcontextprotocol/inspector",
-        "wss://your-app.onrender.com/mcp"
+        "C:\\Users\\Thinkpad\\Desktop\\mcp-websocket-server\\stdio-bridge.js",
+        "wss://mcp-websocket-server.onrender.com/mcp"
+      ]
+    }
+  }
+}
+```
+
+#### Option 2: Using a local server
+
+First start your local server:
+```bash
+npm start
+```
+
+Then configure Claude Desktop:
+```json
+{
+  "mcpServers": {
+    "mail-mcp-server": {
+      "command": "node",
+      "args": [
+        "C:\\Users\\Thinkpad\\Desktop\\mcp-websocket-server\\stdio-bridge.js",
+        "ws://localhost:3000/mcp"
       ]
     }
   }
@@ -71,14 +97,22 @@ Add to your `%APPDATA%\Claude\claude_desktop_config.json` file:
 ## Testing
 
 Test your deployment:
-- Main page: `https://your-app.onrender.com/`
-- Health check: `https://your-app.onrender.com/health`
-- WebSocket: `wss://your-app.onrender.com/mcp`
+- Main page: `https://mcp-websocket-server.onrender.com/`
+- Health check: `https://mcp-websocket-server.onrender.com/health`
+- WebSocket: `wss://mcp-websocket-server.onrender.com/mcp`
 
-Use MCP Inspector to test the WebSocket connection:
+Test the WebSocket connection directly:
 ```bash
-npx @modelcontextprotocol/inspector wss://your-app.onrender.com/mcp
+npm install -g wscat
+wscat -c wss://mcp-websocket-server.onrender.com/mcp
 ```
+
+## Troubleshooting
+
+If you see errors like "Unexpected token" in Claude Desktop logs:
+1. Make sure you're using the stdio-bridge.js file
+2. Ensure the WebSocket URL is correct
+3. Check that the server is running and accessible
 
 ## License
 
